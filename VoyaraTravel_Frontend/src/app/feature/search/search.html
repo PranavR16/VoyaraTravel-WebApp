@@ -1,0 +1,100 @@
+<!-- ===================== SEARCH HERO ===================== -->
+<section class="search-hero">
+  <div class="sh-bg"></div>
+  <div class="sh-content">
+    <div class="sh-label">✦ Explore</div>
+    <h1 class="sh-title">Find Your <span class="sh-it">Dream</span> Escape</h1>
+    <p class="sh-sub">Search and filter from our curated collection of luxury packages</p>
+  </div>
+</section>
+
+<!-- ===================== SEARCH CONTROLS ===================== -->
+<div class="search-controls">
+  <div class="sc-inner">
+
+    <!-- Search input -->
+    <div class="sc-search">
+      <span class="sc-icon">🔍</span>
+      <input
+        class="sc-input"
+        placeholder="Search destinations, packages..."
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onQueryChange()">
+      <button class="sc-clear" *ngIf="searchQuery" (click)="searchQuery=''; onQueryChange()">✕</button>
+    </div>
+
+    <!-- Sort -->
+    <div class="sc-sort">
+      <span class="sc-sort-label">Sort by</span>
+      <select class="sc-select" [(ngModel)]="sortBy" (ngModelChange)="onSortChange()">
+        <option value="popular">Most Popular</option>
+        <option value="low">Price: Low → High</option>
+        <option value="high">Price: High → Low</option>
+        <option value="rating">Highest Rated</option>
+        <option value="duration">Longest Duration</option>
+        <option value="discount">Best Discount</option>
+      </select>
+    </div>
+
+    <!-- Budget slider -->
+    <div class="sc-budget">
+      <span class="sc-budget-label">Max Budget</span>
+      <div class="sc-budget-val">₹{{ maxBudget | number }}</div>
+      <input
+        class="sc-range"
+        type="range"
+        min="30000"
+        max="300000"
+        step="5000"
+        [(ngModel)]="maxBudget"
+        (ngModelChange)="onBudgetChange()">
+      <div class="sc-budget-limits">
+        <span>₹30K</span>
+        <span>₹3L</span>
+      </div>
+    </div>
+
+    <!-- Clear all -->
+    <button class="sc-reset" (click)="clearFilters()">
+      ↺ Reset
+    </button>
+
+  </div>
+</div>
+
+<!-- ===================== RESULTS ===================== -->
+<div class="search-results">
+
+  <!-- Result count -->
+  @if (filteredPackages$ | async; as packages) {
+    <div class="results-meta">
+      <span class="results-count">
+        <strong>{{ packages.length }}</strong> packages found
+      </span>
+      <span class="results-hint" *ngIf="packages.length === 0">
+        Try adjusting your filters
+      </span>
+    </div>
+
+    <!-- Grid -->
+    @if (packages.length > 0) {
+      <div class="pkg-grid">
+        @for (pkg of packages; track pkg.id) {
+          <app-package-card
+            [pkg]="pkg"
+            (bookClicked)="onBookPackage($event)">
+          </app-package-card>
+        }
+      </div>
+    } @else {
+      <!-- Empty state -->
+      <div class="empty-state">
+        <div class="empty-icon">🌿</div>
+        <div class="empty-title">No packages found</div>
+        <p class="empty-desc">Try broadening your search or adjusting the budget filter.</p>
+        <button class="empty-btn" (click)="clearFilters()">Clear All Filters</button>
+      </div>
+    }
+  }
+
+</div>

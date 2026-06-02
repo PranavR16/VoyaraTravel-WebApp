@@ -1,0 +1,153 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="heroParticles"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Luxury Travel Redefined</div>
+    <h1>Discover<br><span class="it">Extraordinary</span><br><span>Places</span></h1>
+    <p>Handcrafted journeys to the world's most breathtaking destinations.</p>
+    <div class="hero-actions">
+      <button class="btn-hero-primary" (click)="router.navigate(['/search'])">✦ Explore Destinations</button>
+      <button class="btn-hero-outline" (click)="router.navigate(['/packages'])">▶ View Packages</button>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-n">500+</div><div class="stat-l">Destinations</div></div>
+    <div class="stat"><div class="stat-n">50K+</div><div class="stat-l">Travelers</div></div>
+    <div class="stat"><div class="stat-n">98%</div><div class="stat-l">Satisfaction</div></div>
+  </div>
+</section>
+
+<!-- SEARCH BAR -->
+ @defer{
+<app-search-bar></app-search-bar>
+ }
+<!-- DESTINATIONS -->
+ @defer{
+<section class="section">
+  <div class="sec-hdr">
+    <div>
+      <div class="sec-lbl">✦ Featured</div>
+      <div class="sec-title">Trending <span class="it">Destinations</span></div>
+    </div>
+    <a class="sec-link" routerLink="/search">View All →</a>
+  </div>
+  <div class="dest-grid">
+    <!-- <div class="dest-card" *ngFor="let d of destinations$"
+         [class.big]="d.big" (click)="router.navigate(['/search'])"> -->
+         <!-- *ngFor="let d of destinations$ | async" -->
+    @for (d of (destinations$ | async) ?? []; track d.id) {
+    <div class="dest-card" 
+     [class.big]="d.big" (click)="router.navigate(['/search'])">
+
+      <!-- <div class="dbg" [style.background-image]="'url('+d.image+')'"></div> -->
+       <div class="dbg"><img [src]="d.image" loading="lazy" /></div>
+      <div class="doverlay"></div>
+      <div class="dinfo">
+        <div class="dcountry">{{ d.country }}</div>
+        <div class="dname" [innerHTML]="d.name"></div>
+        <div class="dprice">From <strong>{{ d.startingPrice }}</strong> /person</div>
+      </div>
+    </div>
+  }
+  </div>
+</section>
+ }
+@placeholder {
+               <div style="padding:20px;text-align:center">Loading destinations...</div>
+             }
+
+<!-- PACKAGES -->
+@defer {
+  <section class="section pkg-section">
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-lbl">✦ Best Value</div>
+        <div class="sec-title">Curated <span class="it">Packages</span></div>
+      </div>
+      <a class="sec-link" routerLink="/packages">View All →</a>
+    </div>
+
+    <div class="pkg-filters">
+      <button class="pf"
+        *ngFor="let f of filters"
+        [class.active]="activeFilter === f.value"
+        (click)="setFilter(f.value)">
+        {{ f.label }}
+      </button>
+    </div>
+
+    <!-- ✅ pkg-grid wraps ALL cards — @for is INSIDE the div -->
+    <div class="pkg-grid">
+      @for (pkg of filteredPackages$ | async; track pkg.id) {
+        <app-package-card
+          [pkg]="pkg"
+          (bookClicked)="onBookPackage($event)">
+        </app-package-card>
+      }
+    </div>
+
+  </section>
+} @placeholder {
+  <div style="padding: 20px; text-align: center; color: #7A9E7A;">
+    Loading packages...
+  </div>
+}
+
+<!-- OFFERS BANNER -->
+<div class="offers-banner" id="offers">
+  <div>
+    <div class="sec-lbl">✦ Limited Time</div>
+    <div class="offer-title">Get <span class="offer-hl">35% Off</span><br>Winter Escapes</div>
+    <p class="offer-desc">Exclusive deals across Southeast Asia, Europe & the Middle East.</p>
+    <div class="offer-feats">
+      <span>✓ Free Cancellation</span>
+      <span>✓ No Hidden Fees</span>
+      <span>✓ Price Match</span>
+    </div>
+    <button class="offer-cta" routerLink="/packages">Claim Offer →</button>
+  </div>
+  @defer {
+  <app-countdown-timer></app-countdown-timer>
+}
+  <!-- <app-countdown-timer></app-countdown-timer> -->
+</div>
+
+<!-- TESTIMONIALS -->
+ @defer {
+<section class="section">
+  <div class="sec-hdr">
+    <div>
+      <div class="sec-lbl">✦ Traveler Stories</div>
+      <div class="sec-title">What Our <span class="it">Guests Say</span></div>
+    </div>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card" *ngFor="let t of dataService.testimonials">
+      <div class="tq">"</div>
+      <p class="testi-text">{{ t.text }}</p>
+      <div class="testi-user">
+        <div class="t-avatar" [style.background-image]="'url('+t.avatar+')'"></div>
+        <div>
+          <div class="t-name">{{ t.name }}</div>
+          <div class="t-loc">{{ t.loc }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ }
+ 
+<!-- NEWSLETTER -->
+ <div class="nl-wrap">
+<div class="newsletter">
+  <div class="sec-lbl" style="text-align:center">✦ Stay Updated</div>
+  <div class="nl-title">Get Exclusive <span class="it">Travel Deals</span></div>
+  <p class="nl-desc">Subscribe for personalized offers & early access to flash sales.</p>
+  <div class="nl-form">
+    <input class="nl-input" placeholder="Enter your email..."
+      [(ngModel)]="nlEmail">
+    <button class="nl-btn" (click)="subscribeNewsletter()">Subscribe ✦</button>
+  </div>
+  </div>
+</div>

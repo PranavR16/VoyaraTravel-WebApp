@@ -1,0 +1,142 @@
+// // ===================== CONTAINER =====================
+// .toast-container {
+//   position: fixed;
+//   bottom: 28px;
+//   right: 28px;
+//   z-index: 9000;
+//   display: flex;
+//   flex-direction: column;
+//   gap: 10px;
+//   max-width: 340px;
+//   width: 100%;
+//   pointer-events: none; // let clicks pass through gaps
+// }
+
+// // ===================== TOAST CARD =====================
+// .toast {
+//   display: flex;
+//   align-items: center;
+//   gap: 12px;
+//   background: var(--dark-3);
+//   border: 1px solid var(--card-border);
+//   border-radius: 14px;
+//   padding: 14px 16px;
+//   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
+//               0 4px 16px rgba(0, 0, 0, 0.3);
+//   pointer-events: all;
+//   min-width: 280px;
+//   position: relative;
+//   overflow: hidden;
+
+//   // Coloured left accent bar
+//   &::before {
+//     content: '';
+//     position: absolute;
+//     left: 0; top: 0; bottom: 0;
+//     width: 3px;
+//     border-radius: 14px 0 0 14px;
+//   }
+
+//   // ── Success ──
+//   &.success {
+//     border-color: rgba(76, 175, 132, 0.25);
+//     background: rgba(22, 34, 28, 0.97);
+
+//     &::before { background: var(--success); }
+
+//     .toast-icon {
+//       background: rgba(76, 175, 132, 0.15);
+//       color: var(--success);
+//       border-color: rgba(76, 175, 132, 0.3);
+//     }
+//   }
+
+//   // ── Error ──
+//   &.error {
+//     border-color: rgba(201, 76, 76, 0.25);
+//     background: rgba(34, 18, 18, 0.97);
+
+//     &::before { background: var(--danger); }
+
+//     .toast-icon {
+//       background: rgba(201, 76, 76, 0.15);
+//       color: var(--danger);
+//       border-color: rgba(201, 76, 76, 0.3);
+//     }
+//   }
+
+//   // ── Info ──
+//   &.info {
+//     border-color: rgba(76, 154, 201, 0.25);
+//     background: rgba(14, 26, 38, 0.97);
+
+//     &::before { background: var(--accent); }
+
+//     .toast-icon {
+//       background: rgba(76, 154, 201, 0.15);
+//       color: var(--accent);
+//       border-color: rgba(76, 154, 201, 0.3);
+//     }
+//   }
+// }
+
+// // ===================== ICON =====================
+// .toast-icon {
+//   width: 32px;
+//   height: 32px;
+//   border-radius: 50%;
+//   border: 1px solid transparent;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   font-size: 14px;
+//   font-weight: 700;
+//   flex-shrink: 0;
+// }
+
+// // ===================== TEXT =====================
+// .toast-content {
+//   flex: 1;
+//   min-width: 0;
+// }
+
+// .toast-msg {
+//   font-size: 13px;
+//   line-height: 1.5;
+//   color: var(--text);
+//   display: block;
+// }
+
+// // ===================== CLOSE BUTTON =====================
+// .toast-close {
+//   background: none;
+//   border: none;
+//   color: var(--text-3);
+//   font-size: 18px;
+//   line-height: 1;
+//   padding: 2px 4px;
+//   border-radius: 4px;
+//   flex-shrink: 0;
+//   transition: color 0.2s ease, background 0.2s ease;
+//   cursor: none;
+
+//   &:hover {
+//     color: var(--text);
+//     background: rgba(255, 255, 255, 0.06);
+//   }
+// }
+
+// // ===================== MOBILE =====================
+// @media (max-width: 480px) {
+//   .toast-container {
+//     bottom: 16px;
+//     right: 12px;
+//     left: 12px;
+//     max-width: 100%;
+//   }
+
+//   .toast {
+//     min-width: unset;
+//     width: 100%;
+//   }
+// }

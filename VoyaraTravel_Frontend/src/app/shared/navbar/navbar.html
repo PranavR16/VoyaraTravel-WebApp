@@ -1,0 +1,30 @@
+<nav [class.scrolled]="isScrolled">
+  <div class="logo" routerLink="/home">VOY<em>ara</em></div>
+
+  <ul class="nav-links" [class.mobile-open]="mobileOpen">
+    <li><a routerLink="/home" routerLinkActive="active">Home</a></li>
+    <li><a routerLink="/search" routerLinkActive="active">Destinations</a></li>
+    <li><a routerLink="/packages" routerLinkActive="active">Packages</a></li>
+    <li><a routerLink="/offers" routerLinkActive="active">Offers</a></li>
+    <!-- <li><a routerLink="/booking" class="nav-cta">Book Now</a></li> -->
+
+    <!-- 👇 Dynamic Auth Buttons -->
+    @if (!isLoggedIn()) {
+      <li>
+        <a (click)="goToLogin()" class="nav-cta">Login</a>
+      </li>
+    }
+
+    @if (isLoggedIn()) {
+      <li>
+        <a routerLink="/booking" class="nav-cta">Book Now</a>
+      </li>
+
+      <li class="user-info">
+        <span [routerLink]="['/login']" style="cursor: pointer;">{{ user()?.name }}</span>
+        <a (click)="logout()">Logout</a>
+      </li>
+    }
+  </ul>
+  <button class="mobile-menu-btn" (click)="toggleMobile()">☰</button>
+</nav>

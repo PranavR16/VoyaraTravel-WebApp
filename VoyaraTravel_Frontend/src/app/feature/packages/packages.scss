@@ -1,0 +1,363 @@
+// ===================== PAGE HERO =====================
+.pkg-hero {
+  height: 420px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.pkg-hero-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #1B4332;
+  background-image:
+    linear-gradient(
+      105deg,
+      rgba(8, 20, 12, 0.88) 0%,
+      rgba(15, 35, 22, 0.55) 50%,
+      rgba(8, 20, 12, 0.35) 100%
+    ),
+    url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+
+.pkg-hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 5%;
+  margin-top: 60px;
+}
+
+.pkg-hero-lbl {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #E8C97A;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+
+.pkg-hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 900;
+  line-height: 1.0;
+  color: white;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+
+  .it {
+    font-style: italic;
+    color: #E8C97A;
+  }
+}
+
+.pkg-hero-desc {
+  margin-top: 16px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 500px;
+  line-height: 1.7;
+}
+
+// ===================== TOOLBAR =====================
+.pkg-toolbar {
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+  background: white;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.1);
+  padding: 16px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(27, 67, 50, 0.07);
+}
+
+.pkg-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.pf {
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: none;
+  border: 1.5px solid rgba(27, 67, 50, 0.15);
+  color: #3D5C3D;
+  background: white;
+  transition: all 0.25s ease;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+
+  &.active {
+    background: #1B4332;
+    border-color: #1B4332;
+    color: white;
+    box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
+  }
+
+  &:hover:not(.active) {
+    border-color: #40916C;
+    color: #1B4332;
+    background: #D8F3DC;
+  }
+}
+
+.pkg-sort {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.sort-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #7A9E7A;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.result-count {
+  font-size: 13px;
+  color: #4A6741;
+  font-weight: 600;
+  white-space: nowrap;
+
+  span {
+    color: #1B4332;
+    font-size: 18px;
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+.sort-select {
+  background: white;
+  border: 1.5px solid rgba(27, 67, 50, 0.15);
+  border-radius: 10px;
+  padding: 9px 36px 9px 14px;
+  color: #1A2E1A;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  outline: none;
+  cursor: none;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231B4332' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  transition: all 0.25s ease;
+
+  &:focus {
+    border-color: #40916C;
+    box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.1);
+  }
+
+  option {
+    background: white;
+    color: #1A2E1A;
+  }
+}
+
+// ===================== PACKAGES GRID =====================
+.pkg-body {
+  background: #F8F6F0;
+  padding: 48px 5% 80px;
+  min-height: 60vh;
+}
+
+.pkg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 24px;
+}
+
+// ===================== NO RESULTS =====================
+.no-results {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 24px;
+  border: 1px solid rgba(27, 67, 50, 0.1);
+  box-shadow: 0 4px 24px rgba(27, 67, 50, 0.06);
+}
+
+.no-results-icon {
+  font-size: 64px;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+.no-results-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1A2E1A;
+  margin-bottom: 10px;
+}
+
+.no-results-desc {
+  color: #5A7A5A;
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+
+.no-results-btn {
+  background: linear-gradient(135deg, #1B4332, #2D6A4F);
+  color: white;
+  border: none;
+  padding: 13px 32px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(27, 67, 50, 0.25);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(27, 67, 50, 0.35);
+  }
+}
+
+// ===================== DEALS BANNER =====================
+.deals-banner {
+  background: #F2EDE4;
+  padding: 0 5% 80px;
+}
+
+.deals-inner {
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  background-color: #1B4332;
+  background-image:
+    linear-gradient(135deg, rgba(8, 20, 12, 0.85) 0%, rgba(27, 67, 50, 0.6) 100%),
+    url('https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  padding: 60px 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  box-shadow: 0 20px 60px rgba(27, 67, 50, 0.2);
+}
+
+.deals-text {
+  .deals-lbl {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #E8C97A;
+    margin-bottom: 12px;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    line-height: 1.15;
+    color: white;
+    margin-bottom: 14px;
+
+    .it {
+      font-style: italic;
+      color: #E8C97A;
+    }
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 15px;
+    max-width: 460px;
+    line-height: 1.7;
+  }
+}
+
+.deals-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.deals-btn-primary {
+  background: linear-gradient(135deg, #B8860B, #D4A017);
+  color: white;
+  border: none;
+  padding: 15px 36px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.4);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 40px rgba(184, 134, 11, 0.5);
+  }
+}
+
+.deals-btn-outline {
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  padding: 13px 30px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  cursor: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: white;
+  }
+}
+
+// ===================== RESPONSIVE =====================
+@media (max-width: 1024px) {
+  .deals-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 40px 36px;
+  }
+
+  .deals-actions {
+    align-items: flex-start;
+    flex-direction: row;
+  }
+}
+
+@media (max-width: 768px) {
+  .pkg-hero { height: 320px; }
+  .pkg-toolbar { top: 0; flex-direction: column; align-items: flex-start; }
+  .pkg-grid { grid-template-columns: 1fr 1fr; }
+  .deals-actions { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+  .pkg-grid { grid-template-columns: 1fr; }
+  .deals-inner { padding: 28px 20px; }
+}

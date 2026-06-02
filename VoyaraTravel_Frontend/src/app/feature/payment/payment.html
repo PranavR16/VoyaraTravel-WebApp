@@ -1,0 +1,437 @@
+<div class="payment-page">
+
+  <!-- HEADER STRIP -->
+  <div class="pay-header">
+    <div class="pay-header-inner">
+      <button class="pay-back" (click)="router.navigate(['/booking'])">
+        ← Back to Booking
+      </button>
+      <div class="pay-secure-badge">
+        🔒 256-bit SSL Secured Payment
+      </div>
+      <div class="pay-steps">
+        <span class="ps done">✓ Details</span>
+        <span class="ps-sep">›</span>
+        <span class="ps done">✓ Review</span>
+        <span class="ps-sep">›</span>
+        <span class="ps active">Payment</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="payment-layout" *ngIf="!paymentSuccess">
+
+    <!-- LEFT: PAYMENT FORM -->
+    <div class="payment-left">
+
+      <!-- PAYMENT METHODS -->
+      <div class="pay-card">
+        <div class="pay-card-title">
+          <span class="pay-icon">💳</span> Choose Payment Method
+        </div>
+
+        <div class="method-grid">
+          <button
+            class="method-btn"
+            *ngFor="let m of methods"
+            [class.active]="activeMethod === m.id"
+            (click)="setMethod(m.id)">
+            <span class="method-icon">{{ m.icon }}</span>
+            <span class="method-label">{{ m.label }}</span>
+            <span class="method-check" *ngIf="activeMethod === m.id">✓</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD FORM -->
+      <div class="pay-card" *ngIf="activeMethod === 'card'">
+        <div class="pay-card-title">
+          <span class="pay-icon">🏦</span> Card Details
+        </div>
+
+        <!-- CARD PREVIEW -->
+        <div class="card-preview" [class.flipped]="cardFlipped">
+          <div class="card-front">
+            <div class="card-front-top">
+              <div class="card-chip">
+                <div class="chip-line"></div>
+                <div class="chip-line"></div>
+                <div class="chip-line"></div>
+              </div>
+              <div class="card-brand">{{ cardBrand }}</div>
+            </div>
+            <div class="card-number-display">
+              {{ displayCardNumber }}
+            </div>
+            <div class="card-front-bottom">
+              <div>
+                <div class="card-meta-label">Card Holder</div>
+                <div class="card-meta-value">
+                  {{ cardForm.name || 'YOUR NAME' }}
+                </div>
+              </div>
+              <div>
+                <div class="card-meta-label">Expires</div>
+                <div class="card-meta-value">
+                  {{ cardForm.expiry || 'MM/YY' }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-back">
+            <div class="card-back-strip"></div>
+            <div class="card-cvv-row">
+              <div class="cvv-label">CVV</div>
+              <div class="cvv-box">{{ cardForm.cvv ? '•••' : '' }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD INPUTS -->
+        <div class="form-grid">
+          <div class="form-group full">
+            <label class="form-label">Card Number *</label>
+            <div class="input-wrap">
+              <span class="input-icon">💳</span>
+              <input
+                class="form-input"
+                placeholder="1234 5678 9012 3456"
+                [(ngModel)]="cardForm.number"
+                (input)="formatCardNumber($event)"
+                maxlength="19"
+                [class.error]="cardErrors['number']">
+            </div>
+            <span class="err-msg" *ngIf="cardErrors['number']">
+              Valid 16-digit card number required
+            </span>
+          </div>
+
+          <div class="form-group full">
+            <label class="form-label">Cardholder Name *</label>
+            <div class="input-wrap">
+              <span class="input-icon">👤</span>
+              <input
+                class="form-input"
+                placeholder="Name as on card"
+                [(ngModel)]="cardForm.name"
+                (input)="cardForm.name = $any($event.target).value.toUpperCase()"
+                [class.error]="cardErrors['name']">
+            </div>
+            <span class="err-msg" *ngIf="cardErrors['name']">
+              Cardholder name required
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Expiry Date *</label>
+            <div class="input-wrap">
+              <span class="input-icon">📅</span>
+              <input
+                class="form-input"
+                placeholder="MM/YY"
+                [(ngModel)]="cardForm.expiry"
+                (input)="formatExpiry($event)"
+                maxlength="5"
+                [class.error]="cardErrors['expiry']">
+            </div>
+            <span class="err-msg" *ngIf="cardErrors['expiry']">
+              Valid expiry required
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">CVV *</label>
+            <div class="input-wrap">
+              <span class="input-icon">🔒</span>
+              <input
+                class="form-input"
+                placeholder="•••"
+                [(ngModel)]="cardForm.cvv"
+                (focus)="cardFlipped = true"
+                (blur)="cardFlipped = false"
+                maxlength="4"
+                type="password"
+                [class.error]="cardErrors['cvv']">
+            </div>
+            <span class="err-msg" *ngIf="cardErrors['cvv']">CVV required</span>
+          </div>
+
+          <!-- Save card toggle -->
+          <div class="form-group full">
+            <div class="save-card-row">
+              <div class="toggle-wrap" (click)="saveCard = !saveCard">
+                <div class="toggle" [class.on]="saveCard">
+                  <div class="toggle-knob"></div>
+                </div>
+                <span class="toggle-label">Save card for future bookings</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMI SECTION -->
+        <div class="emi-section">
+          <div class="emi-header" (click)="showEmi = !showEmi">
+            <span class="emi-title">📊 Pay in Easy EMIs</span>
+            <span class="emi-toggle">{{ showEmi ? '▲' : '▼' }}</span>
+          </div>
+          <div class="emi-plans" *ngIf="showEmi">
+            <div
+              class="emi-plan"
+              *ngFor="let plan of emiPlans"
+              [class.active]="selectedEmi === plan.months"
+              (click)="selectedEmi = plan.months">
+              <div class="emi-months">{{ plan.months }} Months</div>
+              <div class="emi-amount">
+                <!-- ₹{{ calcEmi(plan.months, plan.rate) | number:'1.0-0' }}/mo -->
+              </div>
+              <div class="emi-rate">{{ plan.rate }}% p.a.</div>
+              <div class="emi-check" *ngIf="selectedEmi === plan.months">✓</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- UPI FORM -->
+      <div class="pay-card" *ngIf="activeMethod === 'upi'">
+        <div class="pay-card-title">
+          <span class="pay-icon">📱</span> UPI Payment
+        </div>
+
+        <div class="upi-section">
+          <div class="form-group">
+            <label class="form-label">UPI ID *</label>
+            <div class="input-wrap">
+              <span class="input-icon">@</span>
+              <input
+                class="form-input"
+                placeholder="yourname@upi"
+                [(ngModel)]="upiId"
+                [class.error]="upiError">
+            </div>
+            <span class="err-msg" *ngIf="upiError">Valid UPI ID required</span>
+          </div>
+
+          <div class="upi-apps">
+            <div class="upi-app-label">Or pay using</div>
+            <div class="upi-app-grid">
+              <button
+                class="upi-app-btn"
+                *ngFor="let app of upiApps"
+                [class.active]="selectedUpiApp === app.id"
+                (click)="selectedUpiApp = app.id">
+                <span class="upi-app-icon">{{ app.icon }}</span>
+                <span class="upi-app-name">{{ app.name }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NET BANKING -->
+      <div class="pay-card" *ngIf="activeMethod === 'netbanking'">
+        <div class="pay-card-title">
+          <span class="pay-icon">🏛</span> Net Banking
+        </div>
+
+        <div class="bank-grid">
+          <button
+            class="bank-btn"
+            *ngFor="let bank of banks"
+            [class.active]="selectedBank === bank.id"
+            (click)="selectedBank = bank.id">
+            <span class="bank-icon">{{ bank.icon }}</span>
+            <span class="bank-name">{{ bank.name }}</span>
+          </button>
+        </div>
+
+        <div class="form-group" style="margin-top: 16px">
+          <label class="form-label">Other Banks</label>
+          <select class="form-input" [(ngModel)]="selectedBank">
+            <option value="">Select your bank</option>
+            <option *ngFor="let b of allBanks" [value]="b.id">{{ b.name }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- WALLET -->
+      <div class="pay-card" *ngIf="activeMethod === 'wallet'">
+        <div class="pay-card-title">
+          <span class="pay-icon">👛</span> Wallets
+        </div>
+
+        <div class="wallet-grid">
+          <button
+            class="wallet-btn"
+            *ngFor="let w of wallets"
+            [class.active]="selectedWallet === w.id"
+            (click)="selectedWallet = w.id">
+            <span class="wallet-icon">{{ w.icon }}</span>
+            <span class="wallet-name">{{ w.name }}</span>
+            <span class="wallet-check" *ngIf="selectedWallet === w.id">✓</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="payment-right">
+      <div class="order-summary">
+
+        <!-- Package image -->
+        <div class="os-img"
+          [style.background-image]="pkg ? 'url(' + pkg.image + ')' : ''">
+          <div class="os-overlay"></div>
+          <div class="os-badge" *ngIf="pkg">{{ pkg.badge }}</div>
+          <div class="os-pkg-name-overlay">{{ pkg?.name }}</div>
+        </div>
+
+        <div class="os-body">
+
+          <!-- Trip summary -->
+          <div class="trip-meta">
+            <div class="trip-meta-item">
+              <span class="tm-icon">🌙</span>
+              <span>{{ pkg?.nights }} Nights</span>
+            </div>
+            <div class="trip-meta-item">
+              <span class="tm-icon">👥</span>
+              <span>{{ totalPax }} Traveler{{ totalPax > 1 ? 's' : '' }}</span>
+            </div>
+          </div>
+
+          <!-- Price breakdown -->
+          <div class="price-lines">
+            <div class="price-line">
+              <span>Base Package × {{ totalPax }}</span>
+              <strong>₹{{ baseTotal | number }}</strong>
+            </div>
+            <div class="price-line" *ngIf="upgradeTotal > 0">
+              <span>Upgrades</span>
+              <strong>+₹{{ upgradeTotal | number }}</strong>
+            </div>
+            <div class="price-line" *ngIf="addonsTotal > 0">
+              <span>Add-ons</span>
+              <strong>+₹{{ addonsTotal | number }}</strong>
+            </div>
+            <div class="price-line">
+              <span>Taxes (5%)</span>
+              <strong>₹{{ taxAmount | number }}</strong>
+            </div>
+            <div class="price-line discount" *ngIf="discountAmount > 0">
+              <span>Discount</span>
+              <strong>−₹{{ discountAmount | number }}</strong>
+            </div>
+          </div>
+
+          <!-- Grand total -->
+          <div class="os-total">
+            <span>Total Amount</span>
+            <!-- <span class="os-total-price">₹{{ grandTotal | number }}</span> -->
+          </div>
+
+          <!-- EMI note -->
+          <!-- <div class="emi-note" *ngIf="selectedEmi && activeMethod === 'card'">
+            ≈ ₹{{ calcEmi(selectedEmi, 14) | number:'1.0-0' }}/month
+            for {{ selectedEmi }} months
+          </div> -->
+
+          <!-- Pay button -->
+          <button
+            class="btn-pay"
+            (click)="processPayment()"
+            [class.loading]="processing">
+            <!-- <span *ngIf="!processing">
+              🔒 Pay ₹{{ grandTotal | number }}
+            </span> -->
+            <span *ngIf="processing" class="pay-loading">
+              <span class="spinner"></span> Processing...
+            </span>
+          </button>
+
+          <!-- Trust badges -->
+          <div class="trust-grid">
+            <div class="trust-item">🔒 SSL Secure</div>
+            <div class="trust-item">↩ Free Cancel</div>
+            <div class="trust-item">✓ Best Price</div>
+            <div class="trust-item">🏆 Trusted</div>
+          </div>
+
+          <!-- Payment logos -->
+          <div class="pay-logos">
+            <span>Visa</span>
+            <span>Mastercard</span>
+            <span>RuPay</span>
+            <span>UPI</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SUCCESS STATE -->
+  <div class="payment-success" *ngIf="paymentSuccess">
+    <div class="success-card">
+      <div class="success-anim">
+        <div class="success-circle">
+          <div class="success-check">✓</div>
+        </div>
+        <div class="success-rings">
+          <div class="ring ring-1"></div>
+          <div class="ring ring-2"></div>
+          <div class="ring ring-3"></div>
+        </div>
+      </div>
+
+      <div class="success-title">Booking Confirmed! 🎉</div>
+      <div class="success-desc">
+        Your journey is booked. Get ready for an extraordinary experience!
+      </div>
+
+      <div class="booking-ref">
+        <div class="ref-label">Booking Reference</div>
+        <div class="ref-code">{{ bookingRef }}</div>
+      </div>
+
+      <div class="success-details">
+        <div class="sd-item">
+          <span class="sd-icon">✈</span>
+          <div>
+            <div class="sd-label">Package</div>
+            <div class="sd-value">{{ pkg?.name }}</div>
+          </div>
+        </div>
+        <div class="sd-item">
+          <span class="sd-icon">💰</span>
+          <div>
+            <div class="sd-label">Amount Paid</div>
+            <!-- <div class="sd-value">₹{{ grandTotal | number }}</div> -->
+          </div>
+        </div>
+        <div class="sd-item">
+          <span class="sd-icon">📧</span>
+          <div>
+            <div class="sd-label">Confirmation sent to</div>
+            <div class="sd-value">{{ bookingEmail }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-actions">
+        <button class="btn-home" (click)="router.navigate(['/'])">
+          Back to Home
+        </button>
+        <button class="btn-explore" (click)="router.navigate(['/packages'])">
+          Explore More →
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

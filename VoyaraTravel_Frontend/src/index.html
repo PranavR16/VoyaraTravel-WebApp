@@ -1,0 +1,150 @@
+<!-- <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>VoyaraTravel</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html> -->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Voyara Travel</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- ✅ Preconnect first -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+
+  <!-- ✅ Preload critical font -->
+  <link rel="preload"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@400;500;600&display=swap"
+    as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+
+  <!-- ✅ Fallback for no-JS -->
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  </noscript>
+
+  <!-- ✅ Prevent layout shift before Angular loads -->
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0D2418; /* forest color — matches your theme */
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+
+    /* Reserve exact hero height so nothing shifts */
+    app-root {
+      display: block;
+      min-height: 100vh;
+    }
+
+    /* Loading screen shown before Angular boots */
+    .initial-loader {
+      position: fixed;
+      inset: 0;
+      background: #0D2418;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 99999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    .initial-loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .loader-logo {
+      font-family: Georgia, serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: #B8860B;
+      letter-spacing: 4px;
+      margin-bottom: 32px;
+      animation: logoPulse 1.5s ease infinite;
+    }
+
+    .loader-logo em {
+      color: white;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .loader-bar {
+      width: 180px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .loader-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1B4332, #B8860B, #1B4332);
+      background-size: 200% 100%;
+      border-radius: 2px;
+      animation: loaderSlide 1.2s ease infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.6; }
+    }
+
+    @keyframes loaderSlide {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ✅ Loading screen — hides once Angular boots -->
+  <div class="initial-loader" id="initialLoader">
+    <div class="loader-logo">VOY<em>ara</em></div>
+    <div class="loader-bar">
+      <div class="loader-fill"></div>
+    </div>
+  </div>
+
+  <app-root></app-root>
+
+  <!-- ✅ Hide loader once app is ready -->
+  <script>
+    // Hide loader when Angular finishes bootstrapping
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        var loader = document.getElementById('initialLoader');
+        if (loader) {
+          loader.classList.add('hidden');
+          setTimeout(function() {
+            loader.remove();
+          }, 500);
+        }
+      }, 800); // slight delay so fonts render first
+    });
+  </script>
+
+</body>
+</html>

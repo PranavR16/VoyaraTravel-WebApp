@@ -1,0 +1,90 @@
+<!-- ===================== HERO ===================== -->
+<section class="pkg-hero">
+  <div class="pkg-hero-bg"></div>
+  <div class="pkg-hero-content">
+    <div class="pkg-hero-lbl">✦ Best Value</div>
+    <h1 class="pkg-hero-title">
+      Our <span class="it">Packages</span>
+    </h1>
+    <p class="pkg-hero-desc">
+      Handpicked journeys for every kind of traveler —
+      from beach lovers to adventure seekers.
+    </p>
+  </div>
+</section>
+
+<!-- ===================== TOOLBAR ===================== -->
+<div class="pkg-toolbar">
+  <div class="pkg-filters">
+    <button
+      class="pf"
+      *ngFor="let f of filters"
+      [class.active]="activeFilter === f.value"
+      (click)="setFilter(f.value)">
+      {{ f.label }}
+    </button>
+  </div>
+
+  <div class="pkg-sort">
+    <span class="result-count">
+      @if (filteredPackages$ | async; as pkgs) 
+      {
+      <span>{{ pkgs.length }} packages</span>
+      }
+      <!-- <span>{{ filteredPackages$ }}</span> packages -->
+    </span>
+    <span class="sort-label">Sort By</span>
+    <select class="sort-select" [(ngModel)]="sortBy" (change)="onSortChange()">
+      <option *ngFor="let s of sortOptions" [value]="s.value">
+        {{ s.label }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<!-- ===================== PACKAGES GRID ===================== -->
+<div class="pkg-body">
+
+  <!-- Results -->
+  <div class="pkg-grid">
+  @for (pkg of (filteredPackages$ | async)?? []; track pkg.id) {
+    <app-package-card
+      [pkg]="pkg"
+      (bookClicked)="onBookPackage($event)">
+    </app-package-card>
+  } @empty {
+    <!-- This replaces the need for *ngIf="...length > 0" -->
+    <p>No packages available at the moment.</p>
+  }
+</div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="(filteredPackages$ | async) as pkgs">
+    <div class="no-results-icon">🔍</div>
+    <div class="no-results-title">No packages found</div>
+    <p class="no-results-desc">Try a different category or reset filters</p>
+    <button class="no-results-btn" (click)="setFilter('all')">
+      View All Packages
+    </button>
+  </div>
+
+</div>
+
+<!-- ===================== DEALS BANNER ===================== -->
+<div class="deals-banner">
+  <div class="deals-inner">
+    <div class="deals-text">
+      <div class="deals-lbl">✦ Exclusive Offer</div>
+      <h3>Can't Find What <span class="it">You're Looking For?</span></h3>
+      <p>Our travel experts craft fully custom itineraries tailored to your dream journey.</p>
+    </div>
+    <div class="deals-actions">
+      <button class="deals-btn-primary" (click)="router.navigate(['/booking'])">
+        Plan My Trip →
+      </button>
+      <button class="deals-btn-outline">
+        Talk to an Expert
+      </button>
+    </div>
+  </div>
+</div>

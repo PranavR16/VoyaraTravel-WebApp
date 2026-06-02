@@ -1,0 +1,341 @@
+<div class="booking-page">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar">
+    <div class="progress-inner">
+      <div class="p-step" *ngFor="let step of steps; let i = index"
+           [class.active]="currentStep === i"
+           [class.done]="currentStep > i">
+        <div class="p-dot">
+          @if(currentStep<=i)
+          {<span>{{ i + 1 }}</span>}
+           <!-- *ngIf="currentStep <= i" -->
+          @if(currentStep>i)
+          {<span>✓</span>}
+           <!-- *ngIf="currentStep > i" -->
+        </div>
+        <span class="p-label">{{ step }}</span>
+      </div>
+      <div class="p-track">
+        <div class="p-fill" [style.width]="progressWidth"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="booking-layout">
+
+    <!-- LEFT: STEPS -->
+    <div class="booking-left">
+
+      <!-- ══ STEP 1: TRAVELERS ══ -->
+       @if(currentStep===0)
+       {
+      <div class="bk-card">
+        <!-- *ngIf="currentStep === 0" -->
+        <div class="bk-card-title">
+          <span class="bk-icon">👥</span> Who's Traveling?
+        </div>
+
+        <div class="traveler-list">
+          @for (trv of travelerTypes; track trv.key) {
+            <!-- *ngFor="let trv of travelerTypes" -->
+          <div class="traveler-row">
+            <div class="trv-left">
+              <div class="trv-icon">{{ trv.icon }}</div>
+              <div>
+                <div class="trv-name">{{ trv.label }}</div>
+                <div class="trv-age">{{ trv.age }}</div>
+              </div>
+            </div>
+            <div class="trv-counter">
+              <button class="trv-btn"
+                (click)="changeTraveler(trv.key, -1)"
+                [disabled]="getTravelerCount(trv.key) <= (trv.key === 'adults' ? 1 : 0)">
+                −
+              </button>
+              <span class="trv-num">{{ getTravelerCount(trv.key) }}</span>
+              <button class="trv-btn" (click)="changeTraveler(trv.key, 1)">+</button>
+            </div>
+          </div>
+        }
+        </div>
+
+        <div class="step-footer">
+          <div></div>
+          <button class="btn-next" (click)="nextStep()">
+            Continue <span>→</span>
+          </button>
+        </div>
+      </div>
+    }
+      <!-- ══ STEP 2: PERSONAL INFO ══ -->
+       @if(currentStep===1){
+      <div class="bk-card">
+        <!-- *ngIf="currentStep === 1" -->
+        <div class="bk-card-title">
+          <span class="bk-icon">👤</span> Personal Information
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">First Name *</label>
+            <input class="form-input"
+              placeholder="Rahul"
+              autocomplete="given-name"
+              [(ngModel)]="form.firstName"
+              [class.error]="errors['firstName']">
+            <span class="err-msg" *ngIf="errors['firstName']">Required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name *</label>
+            <input class="form-input"
+              placeholder="Gupta"
+              autocomplete="family-name"
+              [(ngModel)]="form.lastName"
+              [class.error]="errors['lastName']">
+            <span class="err-msg" *ngIf="errors['lastName']">Required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address *</label>
+            <input class="form-input" type="email"
+              placeholder="rahul@email.com"
+              autocomplete="emailid"
+              [(ngModel)]="form.email"
+              [class.error]="errors['email']">
+            <span class="err-msg" *ngIf="errors['email']">Valid email required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number *</label>
+            <input class="form-input"
+              placeholder="+91 98765 43210"
+              autocomplete="phone number"
+              [(ngModel)]="form.phone"
+              [class.error]="errors['phone']">
+            <span class="err-msg" *ngIf="errors['phone']">Required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date of Birth</label>
+            <input class="form-input" type="date" autocomplete="DOB" [(ngModel)]="form.dob">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nationality</label>
+            <select class="form-input" [(ngModel)]="form.nationality">
+              <option>Indian</option>
+              <option>American</option>
+              <option>British</option>
+              <option>Australian</option>
+              <option>Canadian</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Passport Number</label>
+            <input class="form-input"
+              placeholder="L1234567"
+              autocomplete="passport number"
+              [(ngModel)]="form.passport">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Passport Expiry</label>
+            <input class="form-input" type="date" autocomplete="Passport expiry" [(ngModel)]="form.passportExpiry">
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Special Requests</label>
+            <textarea class="form-input form-textarea"
+              placeholder="Dietary requirements, room preferences, accessibility needs..."
+              [(ngModel)]="form.specialRequests"
+              rows="3">
+            </textarea>
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <button class="btn-back" (click)="prevStep()">← Back</button>
+          <button class="btn-next" (click)="validateAndNext()">Continue <span>→</span></button>
+        </div>
+      </div>
+    }
+
+      <!-- ══ STEP 3: TRAVEL DATES ══ -->
+       @if(currentStep===2){
+      <div class="bk-card">
+        <!-- *ngIf="currentStep === 2" -->
+        <div class="bk-card-title">
+          <span class="bk-icon">📅</span> Travel Dates & Preferences
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Departure Date *</label>
+            <input class="form-input" type="date"
+              autocomplete="Start Date"
+              [(ngModel)]="form.departDate"
+              [class.error]="errors['departDate']">
+            <span class="err-msg" *ngIf="errors['departDate']">Required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Return Date *</label>
+            <input class="form-input" type="date"
+              autocomplete="end date"
+              [(ngModel)]="form.returnDate"
+              [class.error]="errors['returnDate']">
+            <span class="err-msg" *ngIf="errors['returnDate']">Required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Flight Class</label>
+            <select class="form-input"
+              [(ngModel)]="form.flightClass"
+              (change)="recalculate()">
+              <option value="economy">Economy (+₹0)</option>
+              <option value="premium">Premium Economy (+₹15,000)</option>
+              <option value="business">Business Class (+₹45,000)</option>
+              <option value="first">First Class (+₹90,000)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Room Type</label>
+            <select class="form-input"
+              [(ngModel)]="form.roomType"
+              (change)="recalculate()">
+              <option value="std">Standard (+₹0)</option>
+              <option value="deluxe">Deluxe (+₹8,000)</option>
+              <option value="suite">Suite (+₹25,000)</option>
+              <option value="villa">Private Villa (+₹60,000)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Add-ons -->
+        <div class="addons-section">
+          <div class="addons-title">🎁 Optional Add-ons</div>
+          <div class="addons-grid">
+            @for(addon of addons; track addon.name){
+              <!-- *ngFor="let addon of addons" -->
+            <div class="addon-card"
+              
+              [class.selected]="addon.selected"
+              (click)="toggleAddon(addon)">
+              <div class="addon-icon">{{ addon.icon }}</div>
+              <div class="addon-info">
+                <div class="addon-name">{{ addon.name }}</div>
+                <div class="addon-price">+₹{{ addon.price | number }}</div>
+              </div>
+              <div class="addon-check">{{ addon.selected ? '✓' : '+' }}</div>
+            </div>
+          }
+          </div>
+        </div>
+
+        <div class="step-footer">
+          <button class="btn-back" (click)="prevStep()">← Back</button>
+          <button class="btn-next" (click)="validateDatesAndNext()">
+            Review & Pay <span>→</span>
+          </button>
+        </div>
+      </div>
+    }
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="booking-right">
+      <div class="order-summary">
+
+        <!-- Package info -->
+        <div class="os-img"
+        [style.background-image]="pkg ? 'url(' + pkg.image + ')' : ''"
+          >
+          
+          <!-- <img *ngIf="pkg" [src]="pkg.image" loading="lazy" /> -->
+          <div class="os-img-overlay"></div>
+          <div class="os-img-badge" *ngIf="pkg">
+            {{ pkg.badge }}
+          </div>
+        </div>
+
+        <div class="os-body">
+          <div class="os-pkg-name">{{ pkg?.name || 'Select a Package' }}</div>
+          <div class="os-pkg-meta">
+            <span>🌙 {{ pkg?.nights }} Nights</span>
+            <span>·</span>
+            <span>👥 {{ totalPax }} Traveler{{ totalPax > 1 ? 's' : '' }}</span>
+          </div>
+
+          <!-- Coupon -->
+          <div class="coupon-row">
+            <input class="coupon-input"
+              placeholder="Coupon code..."
+              [(ngModel)]="couponCode"
+              [disabled]="couponApplied">
+            <button class="coupon-btn"
+              (click)="applyCoupon()"
+              [disabled]="couponApplied">
+              {{ couponApplied ? '✓' : 'Apply' }}
+            </button>
+          </div>
+          <div class="coupon-msg success" *ngIf="couponApplied">
+            ✓ {{ discountPct }}% discount applied!
+          </div>
+          <div class="coupon-msg error" *ngIf="couponError">
+            ✕ Invalid coupon code
+          </div>
+
+          <!-- Price breakdown -->
+          <div class="price-lines">
+            <div class="price-line">
+              <span>Base Package</span>
+              <strong>₹{{ pkg?.price | number }}</strong>
+            </div>
+            <div class="price-line">
+              <span>Travelers</span>
+              <strong>×{{ totalPax }}</strong>
+            </div>
+            <div class="price-line" *ngIf="classUpgradePrice > 0">
+              <span>Flight Upgrade</span>
+              <strong>+₹{{ classUpgradePrice | number }}</strong>
+            </div>
+            <div class="price-line" *ngIf="roomUpgradePrice > 0">
+              <span>Room Upgrade</span>
+              <strong>+₹{{ roomUpgradePrice | number }}</strong>
+            </div>
+            <div class="price-line" *ngIf="addonsTotal > 0">
+              <span>Add-ons</span>
+              <strong>+₹{{ addonsTotal | number }}</strong>
+            </div>
+            <div class="price-line">
+              <span>Taxes & Fees (5%)</span>
+              <strong>₹{{ taxAmount | number }}</strong>
+            </div>
+            <div class="price-line discount" *ngIf="discountAmount > 0">
+              <span>Discount</span>
+              <strong>−₹{{ discountAmount | number }}</strong>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="os-total">
+            <span>Total</span>
+            <span class="os-total-price">₹{{ grandTotal | number }}</span>
+          </div>
+
+          <!-- Proceed button (only on last step) -->
+          <button class="btn-proceed"
+            *ngIf="currentStep === 2"
+            (click)="goToPayment()">
+            🔒 Proceed to Payment
+          </button>
+
+          <!-- Trust row -->
+          <div class="trust-row">
+            <span>🔒 SSL Secured</span>
+            <span>↩ Free Cancellation</span>
+            <span>✓ Best Price</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

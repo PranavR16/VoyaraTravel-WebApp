@@ -1,0 +1,228 @@
+<div class="offers-page">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="offers-hero">
+    <div class="offers-hero-bg"></div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ Limited Time Deals</div>
+      <h1>
+        Extraordinary <span class="it">Savings</span><br>
+        Await You
+      </h1>
+      <p>Use exclusive coupon codes at checkout and save big on your dream vacation.</p>
+
+      <!-- Countdown -->
+      <div class="countdown-wrap">
+        <div class="countdown-label">Offers expire in</div>
+        <div class="countdown">
+          <div class="cd-unit">
+            <div class="cd-num">{{ pad(days()) }}</div>
+            <div class="cd-lbl">Days</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num">{{ pad(hours()) }}</div>
+            <div class="cd-lbl">Hours</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num">{{ pad(minutes()) }}</div>
+            <div class="cd-lbl">Mins</div>
+          </div>
+          <div class="cd-sep">:</div>
+          <div class="cd-unit">
+            <div class="cd-num">{{ pad(seconds()) }}</div>
+            <div class="cd-lbl">Secs</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== COUPON CARDS ===================== -->
+  <section class="section coupons-section">
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-lbl">✦ Exclusive Codes</div>
+        <div class="sec-title">Active <span class="it">Coupon Codes</span></div>
+      </div>
+      <div class="sec-note">Apply at checkout to unlock discounts</div>
+    </div>
+
+    <div class="coupons-grid">
+      @for (c of coupons; track c.code) {
+        <div class="coupon-card" [class]="'coupon-' + c.color">
+          <div class="coupon-left">
+            <div class="coupon-icon">{{ c.icon }}</div>
+            <div class="coupon-pct">{{ c.discount }}%<span>OFF</span></div>
+          </div>
+
+          <div class="coupon-body">
+            <div class="coupon-label">{{ c.label }}</div>
+            <div class="coupon-desc">{{ c.description }}</div>
+            <div class="coupon-expiry">🕐 {{ c.expiry }}</div>
+          </div>
+
+          <div class="coupon-right">
+            <div class="coupon-code-wrap">
+              <div class="coupon-code">{{ c.code }}</div>
+            </div>
+            <button class="btn-copy" (click)="copyCoupon(c)"
+              [class.copied]="c.copied">
+              @if (c.copied) { ✓ Copied! }
+              @else { 📋 Copy Code }
+            </button>
+            <button class="btn-use" (click)="bookWithCoupon(c.code)">
+              Use Now →
+            </button>
+          </div>
+
+          <div class="coupon-deco"></div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ===================== COUPON VALIDATOR ===================== -->
+  <section class="validator-section">
+    <div class="validator-inner">
+      <div class="validator-text">
+        <div class="sec-lbl" style="color: rgba(255,255,255,0.7)">✦ Check Your Code</div>
+        <div class="validator-title">
+          Have a Coupon? <span class="it">Validate it</span>
+        </div>
+        <p>Enter any coupon code to check if it's valid and see your savings.</p>
+      </div>
+
+      <div class="validator-form">
+        <div class="v-input-wrap">
+          <input
+            class="v-input"
+            placeholder="Enter coupon code e.g. SUMMER20"
+            [(ngModel)]="couponInput"
+            (keyup.enter)="validateCoupon()"
+            [style.text-transform]="'uppercase'" />
+          <button class="v-btn" (click)="validateCoupon()"
+            [class.loading]="validating">
+            @if (validating) { <span class="spin"></span> }
+            @else { Validate }
+          </button>
+        </div>
+
+        @if (couponResult()) {
+          <div class="v-result" [class.valid]="couponResult()!.valid"
+            [class.invalid]="!couponResult()!.valid">
+            @if (couponResult()!.valid) {
+              <div class="v-result-icon">🎉</div>
+              <div>
+                <div class="v-result-title">
+                  Valid! Save {{ couponResult()!.pct }}%
+                </div>
+                <div class="v-result-msg">{{ couponResult()!.msg }}</div>
+              </div>
+              <button class="v-use-btn"
+                (click)="bookWithCoupon(couponInput)">
+                Book Now →
+              </button>
+            } @else {
+              <div class="v-result-icon">❌</div>
+              <div>
+                <div class="v-result-title">Invalid Code</div>
+                <div class="v-result-msg">{{ couponResult()!.msg }}</div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FLASH DEALS GRID ===================== -->
+  <section class="section">
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-lbl">✦ Right Now</div>
+        <div class="sec-title">Flash <span class="it">Deals</span></div>
+      </div>
+    </div>
+
+    <div class="flash-grid">
+      @for (deal of flashDeals; track deal.title) {
+        <div class="flash-card" (click)="router.navigate(['/packages'])">
+          <div class="flash-icon">{{ deal.icon }}</div>
+          <div class="flash-off">{{ deal.off }}</div>
+          <div class="flash-title">{{ deal.title }}</div>
+          <div class="flash-desc">{{ deal.desc }}</div>
+          <div class="flash-arrow">→</div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ===================== TOP DEALS PACKAGES ===================== -->
+  <section class="section pkg-section">
+    <div class="sec-hdr">
+      <div>
+        <div class="sec-lbl">✦ Biggest Savings</div>
+        <div class="sec-title">Top <span class="it">Discounted</span> Packages</div>
+      </div>
+      <a class="sec-link" routerLink="/packages">View All →</a>
+    </div>
+
+    <div class="pkg-grid" *ngIf="topDeals$ | async as deals">
+      @for (pkg of deals; track pkg.id) {
+        <div class="deal-card" (click)="onBookPackage(pkg)">
+
+          <div class="deal-img"
+            [style.background-image]="'url(' + pkg.image + ')'">
+            <div class="deal-overlay"></div>
+            <div class="deal-ribbon">{{ pkg.discount }}% OFF</div>
+            <div class="deal-nights">🌙 {{ pkg.nights }} Nights</div>
+          </div>
+
+          <div class="deal-body">
+            <div class="deal-badge" [class]="'badge-' + pkg.badgeClass">
+              {{ pkg.badge }}
+            </div>
+            <div class="deal-name">{{ pkg.name }}</div>
+
+            <div class="deal-tags">
+              @for (tag of pkg.tags.slice(0,3); track tag) {
+                <span class="deal-tag">{{ tag }}</span>
+              }
+            </div>
+
+            <div class="deal-footer">
+              <div class="deal-price">
+                <div class="deal-old">₹{{ pkg.oldPrice | number }}</div>
+                <div class="deal-new">₹{{ pkg.price | number }}</div>
+                <div class="deal-save">
+                  Save ₹{{ (pkg.oldPrice - pkg.price) | number }}
+                </div>
+              </div>
+              <button class="deal-btn" (click)="onBookPackage(pkg); $event.stopPropagation()">
+                Book Now →
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- ===================== TERMS ===================== -->
+  <section class="section terms-section">
+    <div class="terms-card">
+      <div class="terms-title">📋 Terms & Conditions</div>
+      <div class="terms-grid">
+        <div class="term-item">✦ Coupons are valid for one-time use per account</div>
+        <div class="term-item">✦ Cannot be combined with other offers</div>
+        <div class="term-item">✦ Valid on base package price only, excludes taxes</div>
+        <div class="term-item">✦ Voyara reserves the right to modify or cancel offers</div>
+        <div class="term-item">✦ Minimum booking value may apply for certain codes</div>
+        <div class="term-item">✦ Offer not valid on packages already on sale</div>
+      </div>
+    </div>
+  </section>
+
+</div>

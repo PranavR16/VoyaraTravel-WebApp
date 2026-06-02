@@ -1,0 +1,102 @@
+// ===================== WRAPPER =====================
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+// ===================== LABEL =====================
+.cd-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+
+// ===================== BLOCKS ROW =====================
+.cd-blocks {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+// ===================== SINGLE BLOCK =====================
+.cd-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  padding: 16px 20px;
+  min-width: 76px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// ===================== NUMBER =====================
+.cd-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 38px;
+  font-weight: 700;
+  color: #E8C97A;
+  line-height: 1;
+  min-width: 2ch;
+  text-align: center;
+}
+
+// ===================== UNIT LABEL =====================
+.cd-unit {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+}
+
+// ===================== SEPARATOR =====================
+.cd-sep {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.35);
+  line-height: 1;
+  margin-bottom: 20px; // aligns with numbers not unit labels
+}
+
+// ===================== RESPONSIVE =====================
+@media (max-width: 768px) {
+  .cd-block {
+    min-width: 60px;
+    padding: 12px 14px;
+  }
+
+  .cd-num  { font-size: 28px; }
+  .cd-sep  { font-size: 22px; }
+}
+
+@media (max-width: 480px) {
+  .cd-block {
+    min-width: 52px;
+    padding: 10px 12px;
+  }
+
+  .cd-num   { font-size: 22px; }
+  .cd-sep   { font-size: 18px; }
+  .cd-label { font-size: 10px; letter-spacing: 2px; }
+}

@@ -1,0 +1,253 @@
+// ===================== SEARCH BOX =====================
+.search-box {
+  background: white;
+  border-radius: 20px;
+  padding: 24px 28px 20px;
+  border: 1px solid rgba(27, 67, 50, 0.12);
+  box-shadow:
+    0 20px 60px rgba(27, 67, 50, 0.15),
+    0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+// ===================== TABS =====================
+.search-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #F2EDE4;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.stab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: none;
+  border: 1.5px solid transparent;
+  background: transparent;
+  color: #7A9E7A;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+
+  .stab-icon { font-size: 15px; }
+  .stab-label { letter-spacing: 0.2px; }
+
+  // Inactive hover
+  &:hover:not(.active) {
+    color: #1B4332;
+    background: #D8F3DC;
+    border-color: rgba(27, 67, 50, 0.15);
+  }
+
+  // Active — gold pill
+  &.active {
+    background: linear-gradient(135deg, #C9920A, #E8B012);
+    color: white;
+    font-weight: 700;
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(201, 146, 10, 0.35);
+  }
+}
+
+// ===================== FIELDS GRID =====================
+.s-fields {
+  display: grid;
+  grid-template-columns: 1.2fr 1.2fr 1fr 1fr 1fr auto;
+  gap: 10px;
+  align-items: end;
+  margin-bottom: 16px;
+}
+
+.fg {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  &.wide { grid-column: span 2; }
+}
+
+// Field label
+.fl {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #7A9E7A;
+  font-weight: 600;
+}
+
+// Input wrapper
+.fi-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.fi-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+// Inputs & selects
+.fi {
+  width: 100%;
+  background: #F2EDE4;
+  border: 1.5px solid rgba(27, 67, 50, 0.1);
+  border-radius: 12px;
+  padding: 12px 14px 12px 36px;
+  color: #1A2E1A;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: all 0.25s ease;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &:focus {
+    border-color: #40916C;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.1);
+  }
+
+  &::placeholder {
+    color: #7A9E7A;
+    font-size: 13px;
+  }
+
+  // Date input
+  &[type="date"] {
+    color: #1A2E1A;
+    color-scheme: light;
+  }
+
+  // Select options
+  option {
+    background: white;
+    color: #1A2E1A;
+  }
+}
+
+// ===================== SEARCH BUTTON =====================
+.s-btn {
+  background: linear-gradient(135deg, #1B4332, #2D6A4F);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 0 28px;
+  height: 46px;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  cursor: none;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(27, 67, 50, 0.3);
+
+  .s-arrow {
+    display: inline-block;
+    font-size: 16px;
+    transition: transform 0.25s ease;
+  }
+
+  &:hover {
+    background: linear-gradient(135deg, #2D6A4F, #40916C);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(27, 67, 50, 0.4);
+
+    .s-arrow { transform: translateX(4px); }
+  }
+
+  &:active { transform: translateY(0); }
+}
+
+// ===================== POPULAR ROW =====================
+.popular-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.popular-label {
+  font-size: 12px;
+  color: #7A9E7A;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.popular-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pop-chip {
+  padding: 5px 14px;
+  background: #D8F3DC;
+  border: 1px solid rgba(27, 67, 50, 0.15);
+  border-radius: 50px;
+  font-size: 12px;
+  color: #2D6A4F;
+  font-weight: 500;
+  cursor: none;
+  transition: all 0.25s ease;
+  font-family: 'DM Sans', sans-serif;
+
+  &:hover {
+    background: #1B4332;
+    color: white;
+    border-color: #1B4332;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(27, 67, 50, 0.2);
+  }
+}
+
+// ===================== RESPONSIVE =====================
+@media (max-width: 1200px) {
+  .s-fields {
+    grid-template-columns: 1fr 1fr 1fr 1fr auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .s-fields {
+    grid-template-columns: 1fr 1fr 1fr auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-box { padding: 18px 16px 16px; }
+
+  .s-fields {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .s-btn {
+    grid-column: 1 / -1;
+    height: 46px;
+    width: 100%;
+  }
+
+  .fg.wide { grid-column: 1 / -1; }
+}
+
+@media (max-width: 480px) {
+  .s-fields { grid-template-columns: 1fr; }
+  .stab .stab-label { display: none; }
+  .stab { padding: 10px 14px; }
+}

@@ -1,0 +1,192 @@
+<div class="search-box">
+
+  <!-- TABS -->
+  <div class="search-tabs">
+    <button
+      class="stab"
+      *ngFor="let tab of tabs"
+      [class.active]="activeTab === tab.id"
+      (click)="setTab(tab.id)">
+      <span class="stab-icon">{{ tab.icon }}</span>
+      <span class="stab-label">{{ tab.label }}</span>
+    </button>
+  </div>
+
+  <!-- FLIGHTS FIELDS -->
+  <div class="s-fields" *ngIf="activeTab === 'flights'">
+    <div class="fg">
+      <label class="fl">✦ From</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">🛫</span>
+        <input class="fi" placeholder="Origin city..." [(ngModel)]="form.from">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ To</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">🛬</span>
+        <input class="fi" placeholder="Destination..." [(ngModel)]="form.to">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Departure</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">📅</span>
+        <input class="fi" type="date" [(ngModel)]="form.departure">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Return</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">📅</span>
+        <input class="fi" type="date" [(ngModel)]="form.returnD">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Travelers</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">👥</span>
+        <select class="fi" [(ngModel)]="form.travelers">
+          <option *ngFor="let o of travelerOptions">{{ o }}</option>
+        </select>
+      </div>
+    </div>
+    <button class="s-btn" (click)="search()">
+      <span>Search</span>
+      <span class="s-arrow">→</span>
+    </button>
+  </div>
+
+  <!-- HOTELS FIELDS -->
+  <div class="s-fields" *ngIf="activeTab === 'hotels'">
+    <div class="fg wide">
+      <label class="fl">✦ Destination</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">📍</span>
+        <input class="fi" placeholder="City or hotel name..." [(ngModel)]="form.to">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Check In</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">📅</span>
+        <input class="fi" type="date" [(ngModel)]="form.checkIn">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Check Out</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">📅</span>
+        <input class="fi" type="date" [(ngModel)]="form.checkOut">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Guests</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">👥</span>
+        <select class="fi" [(ngModel)]="form.travelers">
+          <option *ngFor="let o of travelerOptions">{{ o }}</option>
+        </select>
+      </div>
+    </div>
+    <button class="s-btn" (click)="search()">
+      <span>Search</span>
+      <span class="s-arrow">→</span>
+    </button>
+  </div>
+
+  <!-- PACKAGES FIELDS -->
+  <div class="s-fields" *ngIf="activeTab === 'packages'">
+    <div class="fg wide">
+      <label class="fl">✦ Where to?</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">🌍</span>
+        <input class="fi" placeholder="Dream destination..." [(ngModel)]="form.to">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Duration</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">🌙</span>
+        <select class="fi" [(ngModel)]="form.nights">
+          <option>3–5 Nights</option>
+          <option>6–9 Nights</option>
+          <option>10–14 Nights</option>
+          <option>15+ Nights</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Travelers</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">👥</span>
+        <select class="fi" [(ngModel)]="form.travelers">
+          <option *ngFor="let o of travelerOptions">{{ o }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Budget</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">💰</span>
+        <select class="fi" [(ngModel)]="form.budget">
+          <option>Under ₹50,000</option>
+          <option>₹50k – ₹1L</option>
+          <option>₹1L – ₹2L</option>
+          <option>₹2L+</option>
+        </select>
+      </div>
+    </div>
+    <button class="s-btn" (click)="search()">
+      <span>Search</span>
+      <span class="s-arrow">→</span>
+    </button>
+  </div>
+
+  <!-- CRUISES + ACTIVITIES — shared layout -->
+  <div class="s-fields" *ngIf="activeTab === 'cruises' || activeTab === 'activities'">
+    <div class="fg wide">
+      <label class="fl">✦ Destination</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">🌍</span>
+        <input class="fi"
+          [placeholder]="activeTab === 'cruises' ? 'Port or cruise route...' : 'Activity or city...'"
+          [(ngModel)]="form.to">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Date</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">📅</span>
+        <input class="fi" type="date" [(ngModel)]="form.departure">
+      </div>
+    </div>
+    <div class="fg">
+      <label class="fl">✦ Travelers</label>
+      <div class="fi-wrap">
+        <span class="fi-icon">👥</span>
+        <select class="fi" [(ngModel)]="form.travelers">
+          <option *ngFor="let o of travelerOptions">{{ o }}</option>
+        </select>
+      </div>
+    </div>
+    <button class="s-btn" (click)="search()">
+      <span>Search</span>
+      <span class="s-arrow">→</span>
+    </button>
+  </div>
+
+  <!-- POPULAR DESTINATIONS -->
+  <div class="popular-row">
+    <span class="popular-label">🌿 Popular:</span>
+    <div class="popular-chips">
+      <button
+        class="pop-chip"
+        *ngFor="let dest of popularDestinations"
+        (click)="setDestination(dest)">
+        {{ dest }}
+      </button>
+    </div>
+  </div>
+
+</div>

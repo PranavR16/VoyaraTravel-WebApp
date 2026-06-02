@@ -1,0 +1,444 @@
+<div class="auth-page">
+
+  <!-- LEFT PANEL — decorative -->
+  <div class="auth-left">
+    <div class="auth-left-content">
+      <div class="auth-logo" routerLink="/home">VOY<em>ara</em></div>
+      <div class="auth-tagline">
+        <h2>Your Journey<br><span>Begins Here</span></h2>
+        <p>Access exclusive luxury travel deals, track bookings and manage your dream trips.</p>
+      </div>
+      <div class="auth-feats">
+        <div class="feat-item">✦ 500+ Curated Destinations</div>
+        <div class="feat-item">✦ 24/7 Concierge Support</div>
+        <div class="feat-item">✦ Best Price Guarantee</div>
+        <div class="feat-item">✦ Free Cancellation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — forms -->
+  <div class="auth-right">
+    <div class="auth-card">
+
+      <!-- ===================== TABS ===================== -->
+      <div class="auth-tabs" *ngIf="activeTab !== 'profile'">
+        <button class="atab" [class.active]="activeTab === 'login'"
+          (click)="switchTab('login')">Sign In</button>
+        <button class="atab" [class.active]="activeTab === 'register'"
+          (click)="switchTab('register')">Create Account</button>
+      </div>
+
+      <!-- Profile tab header -->
+      <div class="profile-header" *ngIf="activeTab === 'profile'">
+        <div class="profile-avatar">
+          {{ user()?.name?.charAt(0)?.toUpperCase() }}
+        </div>
+        <div>
+          <div class="profile-name">{{ user()?.name }}</div>
+          <div class="profile-email">{{ user()?.email }}</div>
+        </div>
+        <button class="profile-close" routerLink="/home">✕</button>
+      </div>
+
+      <!-- ===================== LOGIN ===================== -->
+      @if (activeTab === 'login') {
+        <div class="auth-form">
+          <div class="form-title">Welcome back</div>
+          <div class="form-sub">Sign in to continue your journey</div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="inp-icon">✉</span>
+              <input type="email" placeholder="you@email.com"
+                [value]="email()"
+                (input)="email.set($any($event.target).value)"
+                [class.err]="!!errorMsg()" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>
+              Password
+              <span class="forgot-link" (click)="switchTab('forgot')">Forgot?</span>
+            </label>
+            <div class="input-wrap">
+              <span class="inp-icon">🔒</span>
+              <input [type]="showPwd ? 'text' : 'password'"
+                placeholder="Enter password"
+                [value]="password()"
+                (input)="password.set($any($event.target).value)"
+                [class.err]="!!errorMsg()" />
+              <span class="inp-toggle" (click)="showPwd = !showPwd">
+                {{ showPwd ? '🙈' : '👁' }}
+              </span>
+            </div>
+          </div>
+
+          @if (errorMsg()) {
+            <div class="form-error">⚠ {{ errorMsg() }}</div>
+          }
+
+          <button class="btn-auth" (click)="onLogin()" [class.loading]="loading()">
+            @if (loading()) { <span class="spin"></span> Signing in... }
+            @else { Sign In → }
+          </button>
+
+          <div class="auth-divider"><span>or</span></div>
+          <div class="auth-switch">
+            New to Voyara?
+            <span (click)="switchTab('register')">Create a free account</span>
+          </div>
+        </div>
+      }
+
+      <!-- ===================== REGISTER ===================== -->
+      @if (activeTab === 'register') {
+        <div class="auth-form">
+          <div class="form-title">Create Account</div>
+          <div class="form-sub">Join thousands of happy travelers</div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <div class="input-wrap">
+                <span class="inp-icon">👤</span>
+                <input type="text" placeholder="Your name"
+                  [value]="regName()"
+                  (input)="regName.set($any($event.target).value)" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Phone *</label>
+              <div class="input-wrap">
+                <span class="inp-icon">📱</span>
+                <input type="tel" placeholder="+91 98765 43210"
+                  [value]="regPhone()"
+                  (input)="regPhone.set($any($event.target).value)" />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Email Address *</label>
+            <div class="input-wrap">
+              <span class="inp-icon">✉</span>
+              <input type="email" placeholder="you@email.com"
+                [value]="regEmail()"
+                (input)="regEmail.set($any($event.target).value)" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Nationality</label>
+            <div class="input-wrap">
+              <span class="inp-icon">🌍</span>
+              <input type="text" placeholder="e.g. Indian"
+                [value]="regNationality()"
+                (input)="regNationality.set($any($event.target).value)" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Password *</label>
+              <div class="input-wrap">
+                <span class="inp-icon">🔒</span>
+                <input [type]="showPwd ? 'text' : 'password'"
+                  placeholder="Min 8 chars"
+                  [value]="regPassword()"
+                  (input)="regPassword.set($any($event.target).value)" />
+                <span class="inp-toggle" (click)="showPwd = !showPwd">
+                  {{ showPwd ? '🙈' : '👁' }}
+                </span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Confirm Password *</label>
+              <div class="input-wrap">
+                <span class="inp-icon">🔒</span>
+                <input type="password" placeholder="Repeat password"
+                  [value]="regConfirm()"
+                  (input)="regConfirm.set($any($event.target).value)" />
+              </div>
+            </div>
+          </div>
+
+          @if (errorMsg()) {
+            <div class="form-error">⚠ {{ errorMsg() }}</div>
+          }
+          @if (successMsg()) {
+            <div class="form-success">✓ {{ successMsg() }}</div>
+          }
+
+          <button class="btn-auth" (click)="onRegister()" [class.loading]="loading()">
+            @if (loading()) { <span class="spin"></span> Creating... }
+            @else { Create Account → }
+          </button>
+
+          <div class="auth-switch">
+            Already have an account?
+            <span (click)="switchTab('login')">Sign in</span>
+          </div>
+        </div>
+      }
+
+      <!-- ===================== FORGOT PASSWORD ===================== -->
+      @if (activeTab === 'forgot') {
+        <div class="auth-form">
+          <div class="form-title">Reset Password</div>
+          <div class="form-sub">Enter your email to receive an OTP</div>
+
+          <div class="form-group">
+            <label>Email Address</label>
+            <div class="input-wrap">
+              <span class="inp-icon">✉</span>
+              <input type="email" placeholder="you@email.com"
+                [value]="email()"
+                (input)="email.set($any($event.target).value)" />
+            </div>
+          </div>
+
+          @if (otpSent()) {
+            <div class="form-group">
+              <label>OTP Code</label>
+              <div class="input-wrap">
+                <span class="inp-icon">🔢</span>
+                <input type="text" placeholder="Enter 6-digit OTP"
+                  [value]="otp()"
+                  (input)="otp.set($any($event.target).value)"
+                  maxlength="6" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <div class="input-wrap">
+                <span class="inp-icon">🔒</span>
+                <input type="password" placeholder="New password"
+                  [value]="newPassword()"
+                  (input)="newPassword.set($any($event.target).value)" />
+              </div>
+            </div>
+          }
+
+          @if (errorMsg())   { <div class="form-error">⚠ {{ errorMsg() }}</div> }
+          @if (successMsg()) { <div class="form-success">✓ {{ successMsg() }}</div> }
+
+          <button class="btn-auth" (click)="otpSent() ? onResetPassword() : onForgotPassword()"
+            [class.loading]="loading()">
+            @if (loading()) { <span class="spin"></span> Sending... }
+            @else { {{ otpSent() ? 'Reset Password →' : 'Send OTP →' }} }
+          </button>
+
+          <div class="auth-switch">
+            <span (click)="switchTab('login')">← Back to Sign In</span>
+          </div>
+        </div>
+      }
+
+      <!-- ===================== PROFILE ===================== -->
+      @if (activeTab === 'profile') {
+        <div class="profile-tabs">
+          <button class="ptab" [class.active]="profileTab === 'info'"
+            (click)="profileTab = 'info'">Profile</button>
+          <button class="ptab" [class.active]="profileTab === 'password'"
+            (click)="profileTab = 'password'">Password</button>
+          <button class="ptab" [class.active]="profileTab === 'danger'"
+            (click)="profileTab = 'danger'">Account</button>
+        </div>
+
+        <!-- Profile Info -->
+        @if (profileTab === 'info') {
+          <div class="auth-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Full Name</label>
+                <div class="input-wrap">
+                  <span class="inp-icon">👤</span>
+                  <input type="text" [value]="profileName()"
+                    (input)="profileName.set($any($event.target).value)" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <div class="input-wrap">
+                  <span class="inp-icon">📱</span>
+                  <input type="tel" [value]="profilePhone()"
+                    (input)="profilePhone.set($any($event.target).value)" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Email (read-only)</label>
+              <div class="input-wrap">
+                <span class="inp-icon">✉</span>
+                <input type="email" [value]="user()?.email || ''" readonly
+                  class="readonly" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Nationality</label>
+                <div class="input-wrap">
+                  <span class="inp-icon">🌍</span>
+                  <input type="text" [value]="profileNationality()"
+                    (input)="profileNationality.set($any($event.target).value)" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Date of Birth</label>
+                <div class="input-wrap">
+                  <span class="inp-icon">🎂</span>
+                  <input type="date" [value]="profileDob()"
+                    (input)="profileDob.set($any($event.target).value)" />
+                </div>
+              </div>
+            </div>
+
+            @if (errorMsg())   { <div class="form-error">⚠ {{ errorMsg() }}</div> }
+            @if (successMsg()) { <div class="form-success">✓ {{ successMsg() }}</div> }
+
+            <button class="btn-auth" (click)="onUpdateProfile()"
+              [class.loading]="loading()">
+              @if (loading()) { <span class="spin"></span> Saving... }
+              @else { Save Changes }
+            </button>
+          </div>
+        }
+
+        <!-- Change Password -->
+        @if (profileTab === 'password') {
+          <div class="auth-form">
+            <div class="form-group">
+              <label>Current Password</label>
+              <div class="input-wrap">
+                <span class="inp-icon">🔒</span>
+                <input type="password" placeholder="Current password"
+                  [value]="currentPwd()"
+                  (input)="currentPwd.set($any($event.target).value)" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>New Password</label>
+              <div class="input-wrap">
+                <span class="inp-icon">🔑</span>
+                <input type="password" placeholder="Min 8 characters"
+                  [value]="newPwd()"
+                  (input)="newPwd.set($any($event.target).value)" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Confirm New Password</label>
+              <div class="input-wrap">
+                <span class="inp-icon">🔑</span>
+                <input type="password" placeholder="Repeat new password"
+                  [value]="confirmPwd()"
+                  (input)="confirmPwd.set($any($event.target).value)" />
+              </div>
+            </div>
+
+            @if (errorMsg())   { <div class="form-error">⚠ {{ errorMsg() }}</div> }
+            @if (successMsg()) { <div class="form-success">✓ {{ successMsg() }}</div> }
+
+            <button class="btn-auth" (click)="onChangePassword()"
+              [class.loading]="loading()">
+              @if (loading()) { <span class="spin"></span> Updating... }
+              @else { Update Password }
+            </button>
+          </div>
+        }
+
+        <!-- Danger Zone -->
+        @if (profileTab === 'danger') {
+          <div class="auth-form">
+            <div class="danger-zone">
+              <div class="danger-title">⚠ Delete Account</div>
+              <p class="danger-desc">
+                This action is permanent. All your bookings, wishlists and data will be erased.
+              </p>
+              @if (!confirmDelete) {
+                <button class="btn-danger-outline"
+                  (click)="confirmDelete = true">
+                  Delete My Account
+                </button>
+              }
+              @if (confirmDelete) {
+                <div class="danger-confirm">
+                  <div class="form-group">
+                    <label>Type DELETE to confirm</label>
+                    <input type="text" placeholder="DELETE"
+                      [(ngModel)]="deleteConfirmText" />
+                  </div>
+                  <div class="danger-actions">
+                    <button class="btn-cancel" (click)="confirmDelete = false">
+                      Cancel
+                    </button>
+                    <button class="btn-danger"
+                      [disabled]="deleteConfirmText !== 'DELETE'"
+                      (click)="onDeleteAccount()">
+                      @if (loading()) { Deleting... }
+                      @else { Confirm Delete }
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="logout-section">
+              <button class="btn-logout" (click)="onLogout()">
+                Sign Out of Voyara
+              </button>
+            </div>
+          </div>
+        }
+      }
+
+    </div>
+  </div>
+</div>
+
+<!-- <div class="login-container">
+  <div class="login-card">
+
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Login to continue your journey</p>
+
+    <form (ngSubmit)="onLogin()">
+
+      <div class="form-group">
+        <label>Email</label>
+        <input 
+          type="email"
+          [value]="email()"
+          (input)="email.set($any($event.target).value)"
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input 
+          type="password"
+          [value]="password()"
+          (input)="password.set($any($event.target).value)"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button type="submit">Login</button>
+
+      @if (errorMessage())
+      {
+      <div class="error">
+        {{ errorMessage() }}
+      </div>
+      }
+
+    </form>
+  </div>
+</div> -->

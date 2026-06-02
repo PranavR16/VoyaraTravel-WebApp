@@ -1,0 +1,68 @@
+<div class="pkg-card" [class.wishlisted]="isWishlisted">
+
+  <!-- IMAGE SECTION -->
+  <div class="pkg-img-wrap">
+    <div class="pkg-img" [style.background-image]="'url(' + pkg.image + ')'">
+    </div>
+
+    <!-- Discount ribbon — only show if discount > 0 -->
+    <div class="pkg-ribbon" *ngIf="pkg.discount > 0">
+      {{ pkg.discount }}% OFF
+    </div>
+
+    <!-- Badge top-left — only show if badge exists -->
+    <span class="pkg-badge" [ngClass]="pkg.badgeClass" *ngIf="pkg.badge">
+      {{ pkg.badge }}
+    </span>
+
+    <!-- Wishlist top-right -->
+    <button class="pkg-wish" [class.active]="isWishlisted" (click)="onWishlistToggle($event)">
+      {{ isWishlisted ? '❤' : '♡' }}
+    </button>
+
+    <!-- Nights bottom-left -->
+    <div class="pkg-nights">🌙 {{ pkg.nights }} Nights</div>
+  </div>
+
+  <!-- BODY SECTION -->
+  <div class="pkg-body">
+
+    <!-- Stars + Reviews -->
+    <div class="pkg-rating">
+      <span class="stars">{{ starsDisplay }}</span>
+      <!-- ✅ Show count only if reviews > 0, fallback to 'New' -->
+      <span class="rtg-cnt">
+        {{ pkg.reviews ? '(' + pkg.reviews + ' reviews)' : 'New' }}
+      </span>
+    </div>
+
+    <!-- Name -->
+    <div class="pkg-name">{{ pkg.name }}</div>
+
+    <!-- Tags -->
+    <div class="pkg-tags">
+      <span class="pkg-tag" *ngFor="let tag of pkg.tags">{{ tag }}</span>
+    </div>
+
+    <!-- Divider -->
+    <div class="pkg-divider"></div>
+
+    <!-- Price + Button -->
+    <div class="pkg-footer">
+      <div class="pkg-price">
+        <div class="old-p" *ngIf="pkg.oldPrice > pkg.price">
+          ₹{{ pkg.oldPrice | number }}
+        </div>
+        <div class="new-p">
+          ₹{{ pkg.price | number }}
+          <span>/{{ pkg.unit }}</span>
+        </div>
+        <div class="savings-tag" *ngIf="pkg.oldPrice > pkg.price">
+          Save ₹{{ (pkg.oldPrice - pkg.price) | number }}
+        </div>
+      </div>
+      <button class="btn-bk" (click)="onBook()">
+        Book Now <span class="btn-arrow">→</span>
+      </button>
+    </div>
+  </div>

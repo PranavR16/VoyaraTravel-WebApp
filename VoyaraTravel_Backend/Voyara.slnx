@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Voyara.API/Voyara.API.csproj" />
+    <Project Path="src/Voyara.Core/Voyara.Core.csproj" />
+    <Project Path="src/Voyara.Infrastructure/Voyara.Infrastructure.csproj" />
+    <Project Path="src/Voyara.Shared/Voyara.Shared.csproj" />
+  </Folder>
+</Solution>
