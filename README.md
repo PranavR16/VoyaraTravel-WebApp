@@ -167,6 +167,37 @@ http://localhost:5237/swagger
 * SQL Server
 * Entity Framework Core Migrations included
 
+# Database Setup
+
+This project uses SQL Server with Entity Framework Core.
+
+## Restore Database Using EF Core
+
+Run migrations:
+
+```bash
+dotnet ef database update
+```
+---
+
+## Alternative Manual Setup
+
+Execute:
+
+```text
+schema.sql
+```
+
+inside SQL Server Management Studio.
+
+---
+
+## Notes
+
+* Only schema/sample data is included
+* No production credentials or sensitive data are stored
+
+
 ---
 
 # 🔐 Security Note
